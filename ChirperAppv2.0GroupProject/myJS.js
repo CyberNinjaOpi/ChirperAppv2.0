@@ -164,10 +164,10 @@ ChirpApp.editMyProfile = function () {
 	document.getElementById('modal-table').innerHTML = '';
 	var h = "<div class='input-group profile-edit'>";
 	h += "Bio <br/>"
-	h += "<input type='text' placeholder='Bio' class='profile-input form-control'>";
+	h += "<input type='text' placeholder='Bio' id='bio-input' class='profile-input form-control'>";
 	h += "<div><br/>";
 	h += "Pic Link <br/>"
-	h += "<input type='text' placeholder='image Link' id='pi-input' class='profile-input form-control'><br/>";
+	h += "<input type='text' placeholder='image Link' id='pic-input' class='profile-input form-control'><br/>";
 	h += "<img id='profilePict' style='border-radius: 10px;' src='" + ChirpApp.Profile.image + "'/></div><br/>";
 	document.getElementById('modal-title').innerHTML = "Edit Profile";
 	document.getElementById('modal-body').innerHTML = h;
@@ -179,7 +179,7 @@ ChirpApp.editMyProfile = function () {
 	$('#modal-feed').modal();
 };
 ChirpApp.getMyProfile = function () {
-	var url = ChirpApp.makeURL('https://chirperappv2.firebaseio.com', ['Profile']);
+	var url = ChirpApp.makeURL('https://chirperappv2.firebaseio.com', ['profile']);
 	var success = function (rdata) {
 		for (var j in rdata) {
 			ChirpApp.Profile = rdata;
@@ -195,7 +195,7 @@ ChirpApp.getMyProfile = function () {
 ChirpApp.editProfileFirebase = function () {
 	ChirpApp.Profile.bio = document.getElementById('bio-input').value;
 	ChirpApp.Profile.image = document.getElementById('pic-input').value;
-	var url = ChirpApp.makeURL('https://chirperappv2.firebaseio.com', ['Profile']);
+	var url = ChirpApp.makeURL('https://chirperappv2.firebaseio.com', ['profile']);
 	var success = function () {
 		ChirpApp.firebaseId = ChirpApp.Profile.name;
 		ChirpApp.viewMyProfile();
@@ -241,7 +241,7 @@ ChirpApp.viewFriendsProfile = function (i) {
 			var h = "<h3>" + ChirpApp.friends[friendNumber] + "</h3>";
 		}
 		else {
-			var h = "<img id='profilePic' src='" + ChirpApp.friendsProfile[0].image + "'/>";
+			var h = "<img id='profilePic' width='175' height='250' src='" + ChirpApp.friendsProfile[0].image + "'/>";
 		}
 		if (!ChirpApp.friendsProfile[0].bio) {
 			h += "<h4>Bio N/A</h4>";
@@ -250,11 +250,11 @@ ChirpApp.viewFriendsProfile = function (i) {
 			h += "<h4>" + ChirpApp.friendsProfile[0].bio + "</h4>";
 		}
 	}
-	h += "<button type='button' class='btn btn-info'id='message-button' onclick='ChirpApp.seePM(" + friendNumber + ")'>Message</button>";
+	h += "<button type='button' class='btn btn-default text-info'id='message-button' onclick='ChirpApp.seePM(" + friendNumber + ")'>Message</button>";
 	document.getElementById("profileTable").innerHTML = h;
 };
 ChirpApp.getFriendsProfile = function (i) {
-	var url = ChirpApp.makeURL(ChirpApp.friends[i].firebaseURL, ['Profile']);
+	var url = ChirpApp.makeURL(ChirpApp.friends[i].firebaseURL, ['profile']);
 	var success = function (rdata) {
 		ChirpApp.friendsProfile = [];
 		for (var j in rdata) {
@@ -270,6 +270,15 @@ ChirpApp.getFriendsProfile = function (i) {
 
 	ChirpApp.Ajax("GET", url, success, failure, null);
 	ChirpApp.getAllFromFirebase(ChirpApp.makeURL(ChirpApp.friends[i].firebaseURL, ["chirps"]));
+};
+ChirpApp.toggleFriend = function (i) {
+	if (ChirpApp.friends[i].current === true) {
+		ChirpApp.friends[i].current = false;
+	}
+	else if (ChirpApp.friends[i].current === false) {
+		ChirpApp.friends[i].current = true;
+	}
+	ChirpApp.drawFriendsTable();
 };
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*On Page Load*/
@@ -323,12 +332,3 @@ ChirpApp.getfriendsPMsFromFirebase = function () { };
 ChirpApp.drawPMTable = function () { };
 ChirpApp.drawMessageTable = function () { };
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-ChirpApp.toggleFriend = function (i) {
-	if (ChirpApp.friends[i].current === true) {
-		ChirpApp.friends[i].current = false;
-	}
-	else if (ChirpApp.friends[i].current === false) {
-		ChirpApp.friends[i].current = true;
-	}
-	ChirpApp.drawFriendsTable();
-};
