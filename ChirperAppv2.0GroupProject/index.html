@@ -9,20 +9,21 @@
 	</head>
 	<body id="body" class="well">
 		<div class="container" id="container">
-			<div class="row clearfix">
+			<div class="row clearfix text-info">
 				<div class="col-md-12 column">
 					<div class="row clearfix">
 						<div class="col-md-12 column" id="headerDiv">
-							<h1 id="heading"><i class="fa fa-qq"></i> ChirperApp</h1>
-							<button class="btn btn-default" onclick="ChirpApp.createFeed();">Feed</button>
-							<button class="btn btn-default" onclick="ChirpApp.newChirp();">Post New Chirp</button>
-							<button class="btn btn-default" onclick=" chirpapp.getmyprofile();">My Profile</button>
+							<h1 id="heading" class="text-info"><i class="fa fa-qq"></i> ChirperApp</h1>
+							<button class="btn btn-default text-info" onclick="ChirpApp.createFeed();">Feed</button>
+							<button class="btn btn-default text-info" onclick="ChirpApp.newChirp();">Post New Chirp</button>
+							<button class="btn btn-default text-info" onclick="ChirpApp.getMyProfile();">My Profile</button>
 						</div>
 					</div>
 					<div class="row clearfix" id="upperDiv">
 						<div class="col-md-12 column">
 							<div class="row clearfix">
 								<div id="profileTable" class="col-md-2 column">
+									<h2>  <i class="fa fa-cog fa-spin"></i> Loading.... </h2>
 								</div>
 								<div class="col-md-8 column">
 									<div id="messageTable">
