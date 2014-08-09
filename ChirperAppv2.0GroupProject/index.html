@@ -2,7 +2,7 @@
 <center>
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title></title>
+		<title>ChirperAppv2</title>
 		<link href="Content/css/font-awesome.css" rel="stylesheet" />
 		<link href="Content/bootstrap.min.css" rel="stylesheet" />
 		<link href="myCSS.css" rel="stylesheet" />
@@ -13,31 +13,29 @@
 				<div class="col-md-12 column">
 					<div class="row clearfix">
 						<div class="col-md-12 column" id="headerDiv">
-							<h1 id="header"><i class="=fa fa-qq"></i> ChirperApp</h1>
-							<ul class="nav nav-pills" id="navbar">
-								<li class="nav-text"><a onclick="ChApp.newChirp();">Post New Chirp</a></li>
-								<li class="nav-text"><a onclick="ChApp.getMyProfile();">My Profile</a></li>
-								<li class="nav-text"><a onclick="ChApp.createFeed();">Feed</a></li>
-							</ul>
+							<h1 id="heading"><i class="fa fa-qq"></i> ChirperApp</h1>
+							<button class="btn btn-default" onclick="ChirpApp.createFeed();">Feed</button>
+							<button class="btn btn-default" onclick="ChirpApp.newChirp();">Post New Chirp</button>
+							<button class="btn btn-default" onclick=" chirpapp.getmyprofile();">My Profile</button>
 						</div>
 					</div>
 					<div class="row clearfix" id="upperDiv">
-						<!--<div class="col-md-12 column">
+						<div class="col-md-12 column">
 							<div class="row clearfix">
-								<div id="profileDiv" class="col-md-2 column">
+								<div id="profileTable" class="col-md-2 column">
 								</div>
 								<div class="col-md-8 column">
 									<div id="messageTable">
-										<h3>&nbsp;&nbsp;<i class="fa fa-cog fa-spin"></i> Loading... </h3>
+										<h3>  <i class="fa fa-cog fa-spin"></i> Loading.... </h3>
 									</div>
 								</div>
 								<div class="col-md-2 column" id="right-div">
-									<div class="col-md-2 column" id="friendsDiv">
-										<h2>&nbsp;&nbsp;<i class="fa fa-cog fa-spin"></i> Loading... </h2>
+									<div class="col-md-2 column" id="friendsTable">
+										<h2>  <i class="fa fa-cog fa-spin"></i> Loading.... </h2>
 									</div>
 								</div>
 							</div>
-						</div>-->
+						</div>
 					</div>
 				</div>
 			</div>
@@ -51,11 +49,8 @@
 						<h3 class="modal-title"><span id="modal-title">Title</span></h3>
 					</div>
 					<div class="modal-body" id="modal-table"></div>
-					<div class="modal-body" id="modalBody">
-						<p>One fine body&hellip;</p>
-					</div>
-					<div class="modal-footer" id="modal-buttons">
-					</div>
+					<div class="modal-body" id="modal-body"></div>
+					<div class="modal-footer" id="modal-buttons"></div>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
