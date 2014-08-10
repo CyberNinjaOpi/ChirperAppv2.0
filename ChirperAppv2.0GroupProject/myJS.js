@@ -23,12 +23,12 @@ ChirpApp.Friends = function (name, firebaseURL, current) {
 	this.current = current;
 };
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-//ChirpApp.PrivateMessages = function (name, message) {
-//	this.name = name;
-//	this.message = message;
-//	this.timestamp = Date.now();
-//	this.myName = "James";
-//};
+ChirpApp.PrivateMessages = function (name, message) {
+	this.name = name;
+	this.message = message;
+	this.timestamp = Date.now();
+	this.myName = "James";
+};
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*My Profile*/
 ChirpApp.Profile = {
@@ -398,11 +398,12 @@ ChirpApp.drawPMessageTable = function (x) {
 		return 0;
 	});
 	for (var y in ChirpApp.onePersonsPM) {
+		w = ChirpApp.onePersonsPM[y];
 		if (ChirpApp.onePersonsPM[y].myName !== "James") {
-			h += "<tr><td class='friend-pm'>" + ChirpApp.onePersonsPM[y].message + dateFormat(ChirpApp.onePersonsPM[y].timestamp) + "</td></tr>";
+			h += "<tr><td class='friend-pm'>" + w.message + "&minus; &nbsp;" + (new Date(w.timestamp)).toLocaleString() + "</td></tr>";
 		} else {
-			h += "<tr><td class='my-pm'>" + ChirpApp.onePersonsPM[y].message + dateFormat(ChirpApp.onePersonsPM[y].timestamp) + "</td></tr>";
-		}
+			h += "<tr><td class='my-pm'>" + w.message + "&minus;  &nbsp;" + (new Date(w.timestamp)).toLocaleString() + "</td></tr>";
+		}		
 	}
 	h += "</table></div>";
 	document.getElementById('modal-table').innerHTML = h;
