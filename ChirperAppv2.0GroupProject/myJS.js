@@ -8,8 +8,8 @@ ChirpApp.friends = [];
 ChirpApp.friendsChirps = [];
 ChirpApp.currentFriends = [];
 /*Arrays of Private Messages*/
-ChirpApp.pMessages = [];
-ChirpApp.pMessagesToMe = [];
+ChirpApp.privatemessages = [];
+ChirpApp.privatemessagesToMe = [];
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 ChirpApp.Chirps = function (message) {
 	this.message = message;
@@ -23,18 +23,25 @@ ChirpApp.Friends = function (name, firebaseURL, current) {
 	this.current = current;
 };
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ChirpApp.PrivateMessages = function (name, message) {
+	this.name = name;
+	this.message = message;
+	this.timestamp = Date.now();
+	this.myName = "James";
+};
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*My Profile*/
 
 ChirpApp.Profile = {
 	bio: "Ninja Duck is a masked super hero Duck, who fights evil and trains with other ninjas such as ninja fish, ninja dog, and ninja dolpin. Each ninja has their special traits.",
 	image: "http://th01.deviantart.net/fs71/PRE/f/2013/278/0/b/cold_shadow_tribute__maui_mallard_by_thitaniumprince-d6p7quo.png"
 };
-//<img src: "http://th01.deviantart.net/fs71/PRE/f/2013/278/0/b/cold_shadow_tribute__maui_mallard_by_thitaniumprince-d6p7quo.png " width="250" height="350" />
+//<img src: "https://avatars2.githubusercontent.com/u/4668335?v=2&s=460" width="250" height="350" />
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var f = ChirpApp.Friends;
 //var James = new f('James', "https://chirrperapp.firebaseio.com", true);
 var James = new f('James', "https://chirperappv2.firebaseio.com", true);
-var Christopher = new f("Christopher", "https://chris-chirper.firebaseio.com ", false);
+var Christopher = new f("Christopher", "https://chris-chirper.firebaseio.com", true);
 var Craig = new f("Craig", " ", false);
 var Dean = new f("Dean", "https://dean-chirper.firebaseio.com", true);
 var Joshua = new f("Joshua", "https://joshchirpr.firebaseio.com", true);
@@ -250,7 +257,7 @@ ChirpApp.viewFriendsProfile = function (i) {
 			h += "<h4>" + ChirpApp.friendsProfile[0].bio + "</h4>";
 		}
 	}
-	h += "<button type='button' class='btn btn-default text-info'id='message-button' onclick='ChirpApp.seePM(" + friendNumber + ")'>Message</button>";
+	h += "<button type='button' class='btn btn-default text-info'id='message-button' onclick='ChirpApp.seePMs(" + friendNumber + ")'>Message</button>";
 	document.getElementById("profileTable").innerHTML = h;
 };
 ChirpApp.getFriendsProfile = function (i) {
@@ -324,11 +331,84 @@ ChirpApp.seeFeed = function () {
 	$('#modal-feed').modal();
 };
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-ChirpApp.addPM = function () { };
-ChirpApp.seePMs = function () { };
-ChirpApp.sendPMToFirebase = function () { };
-ChirpApp.getPMsFromFriends = function () { };
-ChirpApp.getfriendsPMsFromFirebase = function () { };
-ChirpApp.drawPMTable = function () { };
-ChirpApp.drawMessageTable = function () { };
+ChirpApp.addPM = function (i) {
+	var message = document.getElementById('pm-input').value;
+	var name = ChirpApp.friends[i].name
+	var PM = new ChirpApp.PrivateMessages(name, message);
+	ChirpApp.sendPMToFirebase(PM);
+	ChirpApp.privatemessages.unshift(PM);
+	ChirpApp.drawPMessageTable(friendNumber);
+	document.getElementById('pm-input').value = '';
+};
+	ChirpApp.seePMs = function (x) {
+		document.getElementById('modal-title').innerHTML = "Message To" + ChirpApp.friends[friendNumber].name;
+		var h = "<div class='input-group message-modal'>";
+		h += "<input type='text' placeholder='Message' id='pm-input' class='profile-input form-control'></br>";
+		document.getElementById('modal-body').innerHTML = h;
+		var holder = "<button class='btn btn-default' onclick='ChirpApp.addPM(" + friendNumber + ")'> Send</button>";
+		document.getElementById('modal-buttons').innerHTML = holder;
+		ChirpApp.getfriendsPMsFromFirebase(friendNumber);
+		$('#modal-feed').modal();
+	};
+ChirpApp.sendPMToFirebase = function (PM) {
+	var url = ChirpApp.makeURL("https://chirperappv2.firebaseio.com", ['privatemessages']);
+	var success = function (data) { }
+	var failure = function () { alert("Message Failed To Send, Please Retry") };
+	ChirpApp.Ajax("POST", url, success, failure, PM);
+};
+ChirpApp.getPMsFromFriends = function () {
+	url = ChirpApp.makeURL("https://chirperappv2.firebaseio.com", ['privatemessages']);
+	var success = function (data) {
+		ChirpApp.privatemessages = [];
+		for (var i in data) {
+			data[i].firebaseId = i;
+			ChirpApp.privatemessages.push(data[i]);
+		}
+		ChirpApp.drawPMessageTable(friendNumber);
+	}
+	ChirpApp.Ajax("GET", url, success, alert, null);
+};
+ChirpApp.getfriendsPMsFromFirebase = function (x) {
+	var url = ChirpApp.makeURL(ChirpApp.friends[x].firebaseURL, ['privatemessages']);
+	var success = function (data) {
+		ChirpApp.privateMessagesToMe = [];
+		for (var i in data)
+			if (data[i].name === "James") {
+				ChirpApp.privateMessagesToMe.push(data[i]);
+			}
+		ChirpApp.getPMsFromFriends();
+	}
+	var failure = function () {
+		alert("Error PMs Not Recieved");
+	}
+	ChirpApp.Ajax("GET", url, success, failure);
+};
+ChirpApp.drawPMessageTable = function (x) {
+	var h = "<div class='message-modal'><table class='table-condensed message-modal'>"
+	ChirpApp.onePersonsPM = [];
+	for (var i in ChirpApp.privatemessages) {
+		if (ChirpApp.privatemessages[i].name === ChirpApp.friends[x].name) {
+			ChirpApp.onePersonsPM.push(ChirpApp.privatemessages[i]);
+		}
+	}
+	for (var z in ChirpApp.privateMessagesToMe) {
+		ChirpApp.onePersonsPM.push(ChirpApp.privatemessagesToMe[z]);
+	}
+	ChirpApp.onePersonsPM.sort(function (a, b) {
+		if (a.timestamp < b.timestamp)
+			return -1;
+		if (a.timestamp > b.timestamp)
+			return 1;
+		return 0;
+	});
+	for (var y in ChirpApp.onePersonsPM) {
+		if (ChirpApp.onePersonsPM[y].myName !== "James") {
+			h += "<tr><td class='friend-pm'>" + ChirpApp.onePersonsPM[y].message + dateFormat(ChirpApp.onePersonsPM[y].timestamp) + "</td></tr>";
+		} else {
+			h += "<tr><td class='my-pm'>" + ChirpApp.onePersonsPM[y].message + dateFormat(ChirpApp.onePersonsPM[y].timestamp) + "</td></tr>";
+		}
+	}
+	h += "</table></div>";
+	document.getElementById('modal-table').innerHTML = h;
+};
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
