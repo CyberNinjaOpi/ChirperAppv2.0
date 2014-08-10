@@ -85,7 +85,7 @@ ChirpApp.newChirp = function () {
 	document.getElementById('modal-title').innerHTML = "Post New Message";
 	var holder = "<textarea class='form-control' id='inputMessage' rows='4'></textarea>";
 	document.getElementById('modal-body').innerHTML = holder;
-	var h = "<button id='sendButton' type='button' class='btn btn-info' onclick='ChirpApp.addMessage();'>Post Msg</button>";
+	var h = "<div id='sendButton' type='button' class='btn btn-default text-info' onclick='ChirpApp.addMessage();'>Post Msg</div>";
 	document.getElementById('modal-buttons').innerHTML = h;
 	$("#modal-feed").modal();
 };
@@ -337,7 +337,7 @@ ChirpApp.addPM = function (i) {
 	document.getElementById('pm-input').value = '';
 };
 ChirpApp.seePMs = function (x) {
-	document.getElementById('modal-title').innerHTML = "Message To" + ChirpApp.friends[friendNumber].name;
+	document.getElementById('modal-title').innerHTML = "Message To " + ChirpApp.friends[friendNumber].name;
 	var h = "<div class='input-group message-modal'>";
 	h += "<input type='text' placeholder='Message' id='pm-input' class='profile-input form-control'></br>";
 	document.getElementById('modal-body').innerHTML = h;
