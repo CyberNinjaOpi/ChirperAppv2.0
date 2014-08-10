@@ -23,15 +23,14 @@ ChirpApp.Friends = function (name, firebaseURL, current) {
 	this.current = current;
 };
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-ChirpApp.PrivateMessages = function (name, message) {
-	this.name = name;
-	this.message = message;
-	this.timestamp = Date.now();
-	this.myName = "James";
-};
+//ChirpApp.PrivateMessages = function (name, message) {
+//	this.name = name;
+//	this.message = message;
+//	this.timestamp = Date.now();
+//	this.myName = "James";
+//};
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*My Profile*/
-
 ChirpApp.Profile = {
 	bio: "Ninja Duck is a masked super hero Duck, who fights evil and trains with other ninjas such as ninja fish, ninja dog, and ninja dolpin. Each ninja has their special traits.",
 	image: "http://th01.deviantart.net/fs71/PRE/f/2013/278/0/b/cold_shadow_tribute__maui_mallard_by_thitaniumprince-d6p7quo.png"
@@ -288,9 +287,6 @@ ChirpApp.toggleFriend = function (i) {
 	ChirpApp.drawFriendsTable();
 };
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*On Page Load*/
-ChirpApp.getMyProfile();
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 ChirpApp.createFeed = function () {
 	ChirpApp.findCurrentFriends();
 	ChirpApp.friendsChirps = [];
@@ -340,16 +336,16 @@ ChirpApp.addPM = function (i) {
 	ChirpApp.drawPMessageTable(friendNumber);
 	document.getElementById('pm-input').value = '';
 };
-	ChirpApp.seePMs = function (x) {
-		document.getElementById('modal-title').innerHTML = "Message To" + ChirpApp.friends[friendNumber].name;
-		var h = "<div class='input-group message-modal'>";
-		h += "<input type='text' placeholder='Message' id='pm-input' class='profile-input form-control'></br>";
-		document.getElementById('modal-body').innerHTML = h;
-		var holder = "<button class='btn btn-default' onclick='ChirpApp.addPM(" + friendNumber + ")'> Send</button>";
-		document.getElementById('modal-buttons').innerHTML = holder;
-		ChirpApp.getfriendsPMsFromFirebase(friendNumber);
-		$('#modal-feed').modal();
-	};
+ChirpApp.seePMs = function (x) {
+	document.getElementById('modal-title').innerHTML = "Message To" + ChirpApp.friends[friendNumber].name;
+	var h = "<div class='input-group message-modal'>";
+	h += "<input type='text' placeholder='Message' id='pm-input' class='profile-input form-control'></br>";
+	document.getElementById('modal-body').innerHTML = h;
+	var holder = "<button class='btn btn-default' onclick='ChirpApp.addPM(" + friendNumber + ")'> Send</button>";
+	document.getElementById('modal-buttons').innerHTML = holder;
+	ChirpApp.getfriendsPMsFromFirebase(friendNumber);
+	$('#modal-feed').modal();
+};
 ChirpApp.sendPMToFirebase = function (PM) {
 	var url = ChirpApp.makeURL("https://chirperappv2.firebaseio.com", ['privatemessages']);
 	var success = function (data) { }
@@ -411,4 +407,7 @@ ChirpApp.drawPMessageTable = function (x) {
 	h += "</table></div>";
 	document.getElementById('modal-table').innerHTML = h;
 };
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*On Page Load*/
+ChirpApp.getMyProfile();
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
